@@ -1,38 +1,26 @@
-const myLibrary = [
-  {
-    title:"ABC",
-    author:"DEF",
-    year:1,
-    pages:2,
-    read:true
-  },
-  {
-    title:"ABCE",
-    author:"DEFK",
-    year:9,
-    pages:4,
-    read:false
-  }
-]
+//Empty array to store book objects
+const myLibrary = []
 
+//Book constructor function
 function Book(title, author, year, pages, read){
   this.title = title;
   this.author = author;
   this.year = year;
   this.pages = pages;
   this.read = read;
-
 }
 
-function addBookToLibrary(){
+//Pass on parameters to the Book constructor
+function addBookToLibrary(title, author, year, pages, read){
   const newBook = new Book(title, author, year, pages, read)
   myLibrary.push(newBook)
+  return newBook
 }
 
-
+//DOM Manipulation
+//Make structure into cards
 const sectionWrapper = document.querySelector(".library-section")
-
-myLibrary.forEach(book => {
+function displayBook(book){
   const cardWrapper = document.createElement("div")
   cardWrapper.classList.add("card-wrapper")
   sectionWrapper.appendChild(cardWrapper)
@@ -59,5 +47,18 @@ myLibrary.forEach(book => {
   cardWrapper.appendChild(year)
   cardWrapper.appendChild(pages)
   cardWrapper.appendChild(read)
+}
 
-});
+//Event handler for the "submit" button
+const bookForm = document.getElementById("create-book-form")
+bookForm.addEventListener("submit",(event)=>{
+  event.preventDefault()
+  let bookObj = {}
+  bookObj.title = bookForm.title.value
+  bookObj.author = bookForm.author.value
+  bookObj.year = bookForm.year.value
+  bookObj.page = bookForm.page.value
+  bookObj.read = bookForm.read.value
+  newBook = addBookToLibrary(bookObj.title, bookObj.author, bookObj.year, bookObj.page, bookObj.read)
+  displayBook(newBook)
+})
