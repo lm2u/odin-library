@@ -1,0 +1,16 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.library-section{
+  display: flex;
+  border:1px solid black;
+}
+
+.card-wrapper{
+  min-width:100px;
+  min-height:150px;
+  border: 1px dotted green;
+}
