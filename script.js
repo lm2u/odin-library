@@ -1,6 +1,6 @@
 //Empty array to store book objects
 const myLibrary = []
-let counter = 2;
+let counter = 1;
 
 //Book constructor function
 function Book(title, author, year, pages, read, counter){
@@ -25,7 +25,7 @@ const sectionWrapper = document.querySelector(".library-section")
 function displayBook(book){
   const cardWrapper = document.createElement("div")
   cardWrapper.classList.add("card-wrapper")
-  cardWrapper.dataset.id = counter
+  cardWrapper.dataset.id = counter+1
   sectionWrapper.appendChild(cardWrapper)
 
   const title = document.createElement("h3")
@@ -40,14 +40,15 @@ function displayBook(book){
   read.classList.add("read")
   const delBtn = document.createElement("button")
   delBtn.classList.add("delete")
-  delBtn.dataset.id = counter
-  delBtn.onclick = deleteBook(counter)
+  delBtn.id = `btn-${counter+1}`;
+  delBtn.addEventListener("click",()=> deleteBook(cardWrapper))
 
-  title.textContent = `${book.title}`
-  author.textContent = `${book.author}`
-  year.textContent = `${book.year}`
-  pages.textContent = `${book.pages}`
-  read.textContent = `${book.read}`
+  title.textContent = `${book.title}`;
+  author.textContent = `${book.author}`;
+  year.textContent = `${book.year}`;
+  pages.textContent = `${book.pages}`;
+  // console.log(read)
+  (book.read) ? read.textContent = "You have read" : read.textContent = "No read";
   delBtn.textContent = "Delete"
 
   cardWrapper.appendChild(title)
@@ -56,6 +57,17 @@ function displayBook(book){
   cardWrapper.appendChild(pages)
   cardWrapper.appendChild(read)
   cardWrapper.appendChild(delBtn)
+}
+
+
+function checkReadStatus(read){
+  const readBtn = document.createElement("div")
+  if(read.checked){
+    readBtn.textContent = "You have read"
+  }else{
+    readBtn.textContent = "No read"
+  }
+  cardWrapper.appendChild(readBtn)
 }
 
 //Event handler for the "submit" button
@@ -67,19 +79,16 @@ bookForm.addEventListener("submit",(event)=>{
   bookObj.author = bookForm.author.value
   bookObj.year = bookForm.year.value
   bookObj.page = bookForm.page.value
-  bookObj.read = bookForm.read.value
+  bookObj.read = bookForm.read.checked
   newBook = addBookToLibrary(bookObj.title, bookObj.author, bookObj.year, bookObj.page, bookObj.read, counter)
+  // console.log(Book.prototype.title)
   displayBook(newBook)
   counter++
 })
 
 //Delete the card upon clicking.
 //Tracking based on the data-id value of card-wrapper
-function deleteBook(id) {
-  const btn = document.querySelector(`[data-id="${id}"]`)
-  btn.addEventListener("click",()=>{
-    removeId = btn.dataset.id
-    const card = document.querySelector(`[data-id="${removeId}"]`)
-    sectionWrapper.removeChild(card)
-  })
+function deleteBook(cardWrapper) {
+  sectionWrapper.removeChild(cardWrapper)
 }
+
