@@ -24,12 +24,6 @@ function addBookToLibrary(title, author, year, pages, read, counter){
   return newBook
 }
 
-function readStyle(element){
-  (element.textContent=="Read") 
-  ? element.style.backgroundColor = "green"
-  : element.style.backgroundColor = "red"
-}
-
 window.addEventListener("DOMContentLoaded",(e)=>{
   const readElements = document.querySelectorAll(".read")
   readElements.forEach(read => {
@@ -40,28 +34,28 @@ window.addEventListener("DOMContentLoaded",(e)=>{
 //DOM Manipulation
 //Make structure into cards
 const sectionWrapper = document.querySelector(".library-section")
+const bookForm = document.getElementById("create-book-form")
 
-sectionWrapper.addEventListener("click",(e)=>{
+document.addEventListener("click",(e)=>{
   if(e.target.matches(".delete")){
     deleteBook(e.target.parentNode)
   }
   if(e.target.matches(".read")){
     console.log(e.target.parentNode.dataset.id)
     cardNum = e.target.parentNode.dataset.id.split("-")[1]
-    if(myLibrary[cardNum].read){
-      myLibrary[cardNum].read = false;
-      e.target.textContent = "No read";
-      e.target.style.backgroundColor = "red";
-    }else{
-      myLibrary[cardNum].read = true;
-      e.target.textContent = "Read";
-      e.target.style.backgroundColor = "green"
-    }
-    // toggleRead()
+    toggleRead(e.target, cardNum)
   }
   
+  //Toggle display form when clicking "New Book" button
+  if(e.target.matches(".new-button")){
+    (bookForm.style.display == 'block') ? bookForm.style.display = 'none' : bookForm.style.display ='block';
+  }
 
-  console.log(e.target)
+  //Create newbook when clicking "Add" button
+  if(e.target.matches("button[type='submit']")){
+    createBook(bookForm)
+  }
+  // console.log(e.target)
 })
 
 function displayBook(book){
@@ -91,10 +85,6 @@ function displayBook(book){
   // console.log(read)
   (book.read) ? read.textContent = "Read" : read.textContent = "No read";
   (book.read) ? read.style.backgroundColor = "green" : read.style.backgroundColor = "red";
-  // console.log(read);
-  // read.addEventListener("click",()=>toggleRead(read))
-
-  
 
   cardWrapper.appendChild(title)
   cardWrapper.appendChild(author)
@@ -105,8 +95,7 @@ function displayBook(book){
 }
 
 //Event handler for the "submit" button
-const bookForm = document.getElementById("create-book-form")
-bookForm.addEventListener("submit",(event)=>{
+function createBook(bookForm){
   event.preventDefault()
   let bookObj = {}
   bookObj.title = bookForm.title.value
@@ -118,7 +107,7 @@ bookForm.addEventListener("submit",(event)=>{
   // console.log(Book.prototype.title)
   displayBook(newBook)
   counter++
-})
+}
 
 //Delete the card upon clicking.
 //Tracking based on the data-id value of card-wrapper
@@ -126,3 +115,20 @@ function deleteBook(cardWrapper) {
   sectionWrapper.removeChild(cardWrapper)
 }
 
+function readStyle(element){
+  (element.textContent=="Read") 
+  ? element.style.backgroundColor = "green"
+  : element.style.backgroundColor = "red"
+}
+
+function toggleRead(element, cardNum){
+  if(myLibrary[cardNum].read){
+    myLibrary[cardNum].read = false;
+    element.textContent = "No read";
+    element.style.backgroundColor = "red";
+  }else{
+    myLibrary[cardNum].read = true;
+    element.textContent = "Read";
+    element.style.backgroundColor = "green"
+  }
+}
