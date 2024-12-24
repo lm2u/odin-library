@@ -1,6 +1,6 @@
 //Empty array to store book objects
 const myLibrary = []
-let counter = 1;
+let counter = 0;
 
 //Book constructor function
 function Book(title, author, year, pages, read, counter){
@@ -25,7 +25,6 @@ const sectionWrapper = document.querySelector(".library-section")
 function displayBook(book){
   const cardWrapper = document.createElement("div")
   cardWrapper.classList.add("card-wrapper")
-  cardWrapper.dataset.id = counter+1
   sectionWrapper.appendChild(cardWrapper)
 
   const title = document.createElement("h3")
@@ -40,7 +39,6 @@ function displayBook(book){
   read.classList.add("read")
   const delBtn = document.createElement("button")
   delBtn.classList.add("delete")
-  delBtn.id = `btn-${counter+1}`;
   delBtn.addEventListener("click",()=> deleteBook(cardWrapper))
 
   title.textContent = `${book.title}`;
@@ -49,7 +47,12 @@ function displayBook(book){
   pages.textContent = `${book.pages}`;
   // console.log(read)
   (book.read) ? read.textContent = "You have read" : read.textContent = "No read";
-  delBtn.textContent = "Delete"
+  delBtn.textContent = "Delete";
+
+  (book.read) ? read.style.backgroundColor = "green" : read.style.backgroundColor = "red";
+  read.addEventListener("click",()=>toggleRead(read))
+
+  
 
   cardWrapper.appendChild(title)
   cardWrapper.appendChild(author)
@@ -59,15 +62,16 @@ function displayBook(book){
   cardWrapper.appendChild(delBtn)
 }
 
-
-function checkReadStatus(read){
-  const readBtn = document.createElement("div")
-  if(read.checked){
-    readBtn.textContent = "You have read"
-  }else{
-    readBtn.textContent = "No read"
-  }
-  cardWrapper.appendChild(readBtn)
+function toggleRead(read){
+    if (read.style.backgroundColor=="green") {
+      read.style.backgroundColor = "red"
+      read.textContent = "No read";  
+      myLibrary[counter-1].read = false
+    }else{
+      read.style.backgroundColor = "green"
+      read.textContent = "You have read";  
+      myLibrary[counter-1].read = true;
+    }
 }
 
 //Event handler for the "submit" button
