@@ -1,6 +1,6 @@
 //Empty array to store book objects
 const myLibrary = []
-let counter = 2;
+let counter = 0;
 
 //Book constructor function
 function Book(title, author, year, pages, read, counter){
@@ -12,10 +12,8 @@ function Book(title, author, year, pages, read, counter){
   this.counter = counter;
 }
 
-const tempBook1 = new Book("Atomic Habits", "James Clear", "2018", "320", true, 0)
-const tempBook2 = new Book("Daily Stoic", "Ryan Holiday", "2016", "418", true, 1)
-myLibrary.push(tempBook1)
-myLibrary.push(tempBook2)
+addBookToLibrary("Atomic Habits", "James Clear", "2018", "320", true, 0)
+addBookToLibrary("Daily Stoic", "Ryan Holiday", "2016", "418", true, 1)
 
 //Pass on parameters to the Book constructor
 function addBookToLibrary(title, author, year, pages, read, counter){
@@ -24,15 +22,18 @@ function addBookToLibrary(title, author, year, pages, read, counter){
   return newBook
 }
 
+//Apply initial styling to hardcoded elements
 window.addEventListener("DOMContentLoaded",(e)=>{
+  //This block is now irrelevant since we're loading the content dynamically
+  //This is used when hardcoded, also change counter=2
   const readElements = document.querySelectorAll(".read")
   readElements.forEach(read => {
     readStyle(read)
   });
+  displayBook(myLibrary[0])
+  displayBook(myLibrary[1])
 })
 
-//DOM Manipulation
-//Make structure into cards
 const sectionWrapper = document.querySelector(".library-section")
 const bookForm = document.getElementById("create-book-form")
 
@@ -58,6 +59,8 @@ document.addEventListener("click",(e)=>{
   // console.log(e.target)
 })
 
+//DOM Manipulation
+//Make structure into cards
 function displayBook(book){
   const cardWrapper = document.createElement("div")
   cardWrapper.classList.add("card-wrapper")
@@ -105,6 +108,7 @@ function createBook(bookForm){
   bookObj.read = bookForm.read.checked
   newBook = addBookToLibrary(bookObj.title, bookObj.author, bookObj.year, bookObj.page, bookObj.read, counter)
   // console.log(Book.prototype.title)
+  console.log(newBook)
   displayBook(newBook)
   counter++
 }
@@ -122,6 +126,7 @@ function readStyle(element){
 }
 
 function toggleRead(element, cardNum){
+  console.log(myLibrary[cardNum])
   if(myLibrary[cardNum].read){
     myLibrary[cardNum].read = false;
     element.textContent = "No read";
